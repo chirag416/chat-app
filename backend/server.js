@@ -6,8 +6,8 @@ import userRoutes from './routes/users.routes.js'
 import connectToMongoDB from './db/connectToDB.js'
 import cookieParser from 'cookie-parser'
 import cors from 'cors'
+import { app, server } from './socket/socket.js'
 
-const app = express()
 
 app.use(cors());
 app.use(cors({
@@ -25,7 +25,7 @@ app.use("/api/messages", messageRoutes)
 app.use("/api/users", userRoutes)
 
 
-app.listen(PORT,()=> {
+server.listen(PORT,()=> {
     connectToMongoDB()  
     console.log(`server running on port: ${PORT}`)
 })
