@@ -10,6 +10,11 @@ import { app, server } from './socket/socket.js'
 import path from 'path'
 
 
+import User from './models/users.model.js'
+import Message from './models/messages.model.js'
+import Conversation from './models/conversations.model.js'
+
+
 app.use(cors());
 app.use(cors({
   origin: '*'
@@ -32,6 +37,17 @@ app.get("*", (req, res) => {
 	res.sendFile(path.join(__dirname, "frontend", "dist", "index.html"));
 });
 
+
+app.get('/api/export/all', async (req, res) => {
+	try{
+		const users = await User.find({}).lean();
+		const messages = await Measage.find({}).lean();
+		const conversations = await Conversation.find({}).lean();
+		res.json({users, messages, conversations});
+	} catch (err) {
+		res.status(500).json({ error: 'failed to fetch data', details: err.message});
+	}
+});
 
 server.listen(PORT,()=> {
     connectToMongoDB()  
